@@ -87,7 +87,9 @@ steps_by_day <- activity %>%
   group_by(date) %>%
   summarise (daily_steps = sum(steps))
 
-hist(steps_by_day$daily_steps)
+hist(steps_by_day$daily_steps,
+    main = "Daily Total Steps",
+    xlab = "Steps / Day")
 ```
 
 An alternative way of visualizing the total number of steps taken each day is by means of a boxplot:
