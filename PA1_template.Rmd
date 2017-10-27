@@ -8,6 +8,7 @@ output:
 
 ## Loading and preprocessing the data
 
+
 Before we go and download the data, let's first grab the date: `r Sys.Date()`. Next get the data from the web. The file comes from a repository in my GitHub account that was forked from the original.
 
 ```{r download}
@@ -37,7 +38,15 @@ activity$date <- as.Date(activity$date, format = "%Y-%m-%d")
 
 This concludes the loading and preprocessing of the data. [Element #1 required for a complete submission ("Code for reading in the dataset and/or processing the data.")]
 
+
 ## What is mean total number of steps taken per day?
+
+Since we'll be using `group_by()` and related commands to figure this out we need to install and load the `dplyr` package:
+
+```{r install_dplyr}
+install.packages("dplyr")
+library(dplyr)
+```
 
 
 
