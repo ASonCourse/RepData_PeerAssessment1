@@ -41,6 +41,7 @@ This concludes the loading and preprocessing of the data. [Element #1 required f
 
 ## What is mean total number of steps taken per day?
 
+
 Since we'll be using `group_by()` and related commands to figure this out we need to install and load the `dplyr` package:
 
 ```{r install_dplyr, message=FALSE, warning=FALSE}
@@ -52,7 +53,6 @@ library(dplyr)
 NOTE:
 
 Installing packages by means of R Markdown (`knitr` document) is not advised. The consensus seems to be that users should manage their own package library. We should assume that people know how to install a missing package. Here we've opted to download and install the package _only_ if it's necessary. Arguably a number of users might have dplyr installed / loaded already. See this [resource](https://stackoverflow.com/questions/33969024/install-packages-fails-in-knitr-document-trying-to-use-cran-without-setting-a) for more on the subject.
-
 
 Calculate mean total number of steps per day:
 
@@ -76,7 +76,9 @@ median_total_steps <- activity %>%
 median_steps <- round(mean_total_steps, 0)
 ```
 
-Result: `r as.integer(median_steps)` steps.
+Result: `r as.integer(median_steps)` steps. So, mean and median are equal! [Element #3 required for a complete submission ("Mean and median number of steps taken each day.")]
+
+
 
 ## What is the average daily activity pattern?
 
