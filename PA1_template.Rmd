@@ -101,7 +101,29 @@ boxplot(steps_by_day$daily_steps,
 
 The histogram shows that on most days the number of steps lies between 10.000 and 15.000. The boxplot clearly shows the mean / median and that there are a couple of outliers. [Element #2 required for a complete submission ("Histogram of the total number of steps taken each day.")]
 
+
 ## What is the average daily activity pattern?
+
+
+To show the daily activity pattern we have to group and summarise the data by interval first:
+
+```{r steps_by_interval}
+steps_by_interval <- activity %>%
+  group_by(interval) %>%
+  summarise (av_steps = mean(steps, na.rm = TRUE))
+```
+
+Once we've done that it's relatively easy to create a time-series plot:
+
+```{r daily_pattern_plot}
+plot(steps_by_interval$av_steps, x = steps_by_interval$interval,
+     type = "l",
+     main = "Daily Activity",
+     xlab = "Intervals",
+     ylab = "Average Steps")
+```
+
+[Element #4 required for a complete submission ("Time series plot of the average number of steps taken.")]
 
 
 
