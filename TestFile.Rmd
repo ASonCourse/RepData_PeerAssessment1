@@ -39,6 +39,6 @@ dir.create("test")
 ```
 
 Removing it again:
-```{r rem_dir}
-rm("test")
+```{r file_remove}
+file.remove("test")
 ```
