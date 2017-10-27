@@ -76,9 +76,27 @@ median_total_steps <- activity %>%
 median_steps <- round(mean_total_steps, 0)
 ```
 
-Result: `r as.integer(median_steps)` steps. So, mean and median are equal! [Element #3 required for a complete submission ("Mean and median number of steps taken each day.")]
+Result: `r as.integer(median_steps)` steps.
 
+So, mean and median are equal! [Element #3 required for a complete submission ("Mean and median number of steps taken each day.")]
 
+How about a plot? Yes, let's create a histogram of the total number of steps taken each day:
+
+```{r histogram_daily_steps}
+steps_by_day <- activity %>%
+  group_by(date) %>%
+  summarise (daily_steps = sum(steps))
+
+hist(steps_by_day$daily_steps)
+```
+
+An alternative way of visualizing the total number of steps taken each day is by means of a boxplot:
+
+```{r boxplot_daily_steps}
+boxplot(steps_by_day$daily_steps)
+```
+
+```
 
 ## What is the average daily activity pattern?
 
