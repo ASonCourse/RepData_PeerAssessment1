@@ -44,10 +44,9 @@ This concludes the loading and preprocessing of the data. [Element #1 required f
 Since we'll be using `group_by()` and related commands to figure this out we need to install and load the `dplyr` and 'magrittr` (the last one supports the pipe operator) packages:
 
 ```{r install_dplyr}
+options(repos="https://cran.rstudio.com" )
 install.packages("dplyr")
 library(dplyr)
-install.packages("magrittr")
-library(magrittr)
 ```
 
 Calculate mean total number of steps per day:
