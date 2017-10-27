@@ -45,7 +45,7 @@ Since we'll be using `group_by()` and related commands to figure this out we nee
 
 ```{r install_dplyr}
 options(repos="https://cran.rstudio.com" )
-install.packages("dplyr")
+if (!require(dplyr)) install.packages("dplyr")
 library(dplyr)
 ```
 
