@@ -130,10 +130,10 @@ What's the 5-minute interval with the highest number of steps (on average)? Judg
 ```{r max_interval}
 max_steps <- steps_by_interval[which.max(steps_by_interval$av_steps),]
 max_steps_round <- round(max_steps$av_steps, 0)
-max_steps$interval
 ```
 
-So, the highest number of steps (on average) is `r max_steps_round`. The corresponding interval is `r max_steps$interval`.
+So, the highest number of steps (on average) is `r max_steps_round`. The corresponding interval is `r max_steps$interval`. [Element #5 required for a complete submission ("The 5-minute interval that, on average, contains the maximum number of steps.")]
+
 
 
 ## Imputing missing values
