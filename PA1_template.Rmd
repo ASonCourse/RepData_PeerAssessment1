@@ -8,6 +8,26 @@ output:
 
 ## Loading and preprocessing the data
 
+Before we go and download the data, let's first grab the date: `r Sys.Date()`. Next get the data from the web. The file comes from a repository in my GitHub account that was forked from the original.
+
+```{r download}
+source_url <- "https://raw.githubusercontent.com/ASonCourse/RepData_PeerAssessment1/master/activity.zip"
+
+download.file(source_url, destfile = "activity.zip", 
+              method = "curl")
+```
+
+The downloaded file was compressed, so we will unzip it now:
+
+```{r unzip}
+unzip("activity.zip", exdir = ".")
+```
+
+It turns out the unzipped file is a comma separated file. We can import that into R easily:
+
+```{r import}
+activity <- read.csv("activity.csv", stringsAsFactors = FALSE)
+```
 
 
 ## What is mean total number of steps taken per day?
