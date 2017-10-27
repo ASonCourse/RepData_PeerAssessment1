@@ -31,9 +31,11 @@ activity <- read.csv("activity.csv", stringsAsFactors = FALSE)
 
 The `date` variable in `activity` is of type character and needs to be converted to `date`:
 
-```{r char_to_date}
+```{r char_to_date, eval=FALSE, include=FALSE}
 activity$date <- as.Date(activity$date, format = "%Y-%m-%d")
 ```
+
+This concludes the loading and preprocessing of the data. [Element #1 required for a complete submission ("Code for reading in the dataset and/or processing the data.")]
 
 ## What is mean total number of steps taken per day?
 
