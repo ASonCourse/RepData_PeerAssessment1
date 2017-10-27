@@ -43,11 +43,21 @@ This concludes the loading and preprocessing of the data. [Element #1 required f
 
 Since we'll be using `group_by()` and related commands to figure this out we need to install and load the `dplyr` package:
 
-```{r install_dplyr}
+```{r install_dplyr, eval=FALSE, include=FALSE}
 install.packages("dplyr")
 library(dplyr)
 ```
 
+Calculate mean total number of steps per day:
+
+```{r mean_total_steps}
+mean_total_steps <- activity %>%
+  group_by(date) %>%
+  summarise (daily_steps = sum(steps)) %>%
+  summarise(mean_total_steps = mean(daily_steps, na.rm = TRUE))
+```
+
+Result: `r round(mean_total_steps, 0)` steps.
 
 
 ## What is the average daily activity pattern?
