@@ -62,11 +62,21 @@ mean_total_steps <- activity %>%
   summarise (daily_steps = sum(steps)) %>%
   summarise(mean_total_steps = mean(daily_steps, na.rm = TRUE))
 
-steps <- round(mean_total_steps, 0)
+mean_steps <- round(mean_total_steps, 0)
 ```
 
-Result: `r as.integer(steps)` steps.
+Result: `r as.integer(mean_steps)` steps. How about the median? Let's calculate the median aswell:
 
+```{r median_total_steps}
+median_total_steps <- activity %>%
+  group_by(date) %>%
+  summarise (daily_steps = sum(steps)) %>%
+  summarise(mean_total_steps = median(daily_steps, na.rm = TRUE))
+
+median_steps <- round(mean_total_steps, 0)
+```
+
+Result: `r as.integer(median_steps)` steps.
 
 ## What is the average daily activity pattern?
 
