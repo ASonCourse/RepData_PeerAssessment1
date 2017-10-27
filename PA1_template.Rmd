@@ -29,6 +29,11 @@ It turns out the unzipped file is a comma separated file. We can import that int
 activity <- read.csv("activity.csv", stringsAsFactors = FALSE)
 ```
 
+The `date` variable in `activity` is of type character and needs to be converted to `date`:
+
+```{r char_to_date}
+activity$date <- as.Date(activity$date, format = "%Y-%m-%d")
+```
 
 ## What is mean total number of steps taken per day?
 
