@@ -125,6 +125,15 @@ plot(steps_by_interval$av_steps, x = steps_by_interval$interval,
 
 [Element #4 required for a complete submission ("Time series plot of the average number of steps taken.")]
 
+What's the 5-minute interval with the highest number of steps (on average)? Judging from the plot we can guess that it should be around 800. Luckily, we can figure it out exactly:
+
+```{r max_interval}
+max_steps <- steps_by_interval[which.max(steps_by_interval$av_steps),]
+max_steps_round <- round(max_steps$av_steps, 0)
+max_steps$interval
+```
+
+So, the highest number of steps (on average) is `r max_steps_round`. The corresponding interval is `r max_steps$interval`.
 
 
 ## Imputing missing values
