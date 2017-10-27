@@ -58,7 +58,7 @@ mean_total_steps <- activity %>%
   summarise(mean_total_steps = mean(daily_steps, na.rm = TRUE))
 ```
 
-Result: `r round(mean_total_steps, 0)` steps.
+Result: `r mean_total_steps` steps.
 
 
 ## What is the average daily activity pattern?
