@@ -177,6 +177,61 @@ Is it a good idea to impute the missing data by calculating typical averages for
 
 This can be done by getting the average number of steps by day (by grouping and summarizing). Subsequently joining the dataframe with the averages by day with the ungrouped dataframe (by day) makes the averages available. The NA values can now be easily replaced by the daily averages.
 
+A dataset with imputed data in place of the NA's can be created like this:
+
+```{r activity_imputed}
+# Copy activity to activity_imputed:
+activity_imputed <- activity
+# Create column 'steps.imp' (set to '0' for clarity):
+activity_imputed$steps.imp <- 0
+# Add column 'weekday' (generated from 'date'):
+activity_imputed$weekday <- as.factor(weekdays(activity_imputed$date))
+
+# Create separate dataframe 'activity_weekday':
+activity_weekday <- activity %>%
+  mutate(weekday = as.factor(weekdays(date))) %>%
+  group_by(weekday) %>%
+  summarise(daily_steps = mean(steps, na.rm = TRUE))
+
+# Now join the dataframes 'activity_imputed' and
+# 'activity_weekday'on column 'weekday' (which is in both):
+activity_imputed <- inner_join(activity_imputed, activity_weekday, by = "weekday")
+
+# Replace value in 'steps.imp' with value in 'daily_steps' if
+# 'steps' is NA...
+activity_imputed$steps.imp[is.na(activity_imputed$steps)] <-
+  activity_imputed$daily_steps[is.na(activity_imputed$steps)]
+
+# Checking the result can be done by sampling the dataframe:
+# activity_imputed[sample(nrow(activity_imputed), 10), ]
+# Rows with steps equaling NA should show 'daily_steps' as
+# value in column 'steps.imp'. Other rows should show 0.
+# Everything seems in order...
+
+# Replace value in 'steps.imp' with value in 'steps' if
+# 'steps' is NOT equal to NA...
+activity_imputed$steps.imp[!is.na(activity_imputed$steps)] <-
+  activity_imputed$steps[!is.na(activity_imputed$steps)]
+
+# Make variable 'steps.imp' a numeric again (if neccesary):
+activity_imputed$steps.imp <- as.numeric(activity_imputed$steps.imp)
+
+# Clean the dataframe by removing 'daily_steps' column,
+# since it's no longer relevant:
+activity_imputed$daily_steps <- NULL
+
+# For display purposes we eliminate the column 'weekday':
+display_activity_imputed <- activity_imputed
+display_activity_imputed$weekday <- NULL
+
+# Final check:
+summary(display_activity_imputed)
+# No NA's in the 'steps.imp' column!
+# NB: values in 'steps.imp' are now fractions and should be
+# rounded to the nearest integer before comparing with
+# results from non-imputed data.
+```
+
 
 
 

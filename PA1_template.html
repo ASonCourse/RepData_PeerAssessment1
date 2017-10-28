@@ -122,7 +122,7 @@ $(document).ready(function () {
 
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
-<p>Before we go and download the data, let’s first grab the date: 2017-10-27. Next get the data from the web. The file comes from a repository in my GitHub account that was forked from the original.</p>
+<p>Before we go and download the data, let’s first grab the date: 2017-10-28. Next get the data from the web. The file comes from a repository in my GitHub account that was forked from the original.</p>
 <pre class="r"><code>source_url &lt;- &quot;https://raw.githubusercontent.com/ASonCourse/RepData_PeerAssessment1/master/activity.zip&quot;
 
 download.file(source_url, destfile = &quot;activity.zip&quot;, 
@@ -195,6 +195,51 @@ max_steps_round &lt;- round(max_steps$av_steps, 0)</code></pre>
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
+<p>So, there are missing values in the dataset (NA’s). How many of them are there, exactly? Simply calling <code>summary()</code> on <code>activity</code> will tell us:</p>
+<pre class="r"><code>summary(activity)</code></pre>
+<pre><code>##      steps             date               interval     
+##  Min.   :  0.00   Min.   :2012-10-01   Min.   :   0.0  
+##  1st Qu.:  0.00   1st Qu.:2012-10-16   1st Qu.: 588.8  
+##  Median :  0.00   Median :2012-10-31   Median :1177.5  
+##  Mean   : 37.38   Mean   :2012-10-31   Mean   :1177.5  
+##  3rd Qu.: 12.00   3rd Qu.:2012-11-15   3rd Qu.:1766.2  
+##  Max.   :806.00   Max.   :2012-11-30   Max.   :2355.0  
+##  NA's   :2304</code></pre>
+<p>Alternatively, we can filter out <code>activity</code> observations where <code>steps</code> is NA and subsequently count the number of rows the filtered dataframe has:</p>
+<pre class="r"><code>na_activity &lt;- activity %&gt;% filter(is.na(steps) == TRUE)
+total_number_NAs &lt;- nrow(na_activity)</code></pre>
+<p>The result of this operation is: 2304 NA’s. In relative terms this represents only a fraction of the original dataset (0.1311475), though.</p>
+<p>How to deal with these NA’s? Well, that depends. We have to know a bit more about the NA’s. How are they spread accross the dates / days? The following code delivers the answer to that question:</p>
+<pre class="r"><code>na_by_day &lt;- na_activity %&gt;%
+  group_by(date) %&gt;%
+  summarise(na_count = n())
+na_by_day</code></pre>
+<pre><code>## # A tibble: 8 x 2
+##         date na_count
+##       &lt;date&gt;    &lt;int&gt;
+## 1 2012-10-01      288
+## 2 2012-10-08      288
+## 3 2012-11-01      288
+## 4 2012-11-04      288
+## 5 2012-11-09      288
+## 6 2012-11-10      288
+## 7 2012-11-14      288
+## 8 2012-11-30      288</code></pre>
+<p>The NA’s seem to be occuring on only 8 days. Judging by the number of NA’s for each day (8 times 288) we can conclude that data for complete days are missing (all 288 intervals (12 x 24)). How are these 8 days without data spread accross the total number of days? What days are missing? Always the same days or does it vary? Let’s find out:</p>
+<pre class="r"><code>na_by_day$weekday &lt;- weekdays(na_by_day$date)
+na_by_day$weekday &lt;- as.factor(na_by_day$weekday)
+summary(na_by_day)</code></pre>
+<pre><code>##       date               na_count        weekday 
+##  Min.   :2012-10-01   Min.   :288   Friday   :2  
+##  1st Qu.:2012-10-26   1st Qu.:288   Monday   :2  
+##  Median :2012-11-06   Median :288   Saturday :1  
+##  Mean   :2012-11-01   Mean   :288   Sunday   :1  
+##  3rd Qu.:2012-11-11   3rd Qu.:288   Thursday :1  
+##  Max.   :2012-11-30   Max.   :288   Wednesday:1</code></pre>
+<pre class="r"><code>different_days &lt;- n_distinct(na_by_day$weekday)</code></pre>
+<p>So, the missing data seems to be spread pretty evenly over measurement period and the weekdays (only Tuesday has no missing data; <code>n-distinct()</code> returned 6).</p>
+<p>Is it a good idea to impute the missing data by calculating typical averages for each day of the week? This seems reasonable, since data for <em>complete</em> days is missing.</p>
+<p>This can be done by getting the average number of steps by day (by grouping and summarizing). Subsequently joining the dataframe with the averages by day with the ungrouped dataframe (by day) makes the averages available. The NA values can now be easily replaced by the daily averages.</p>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
