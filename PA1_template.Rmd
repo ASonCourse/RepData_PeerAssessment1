@@ -151,6 +151,10 @@ na_activity <- activity %>% filter(is.na(steps) == TRUE)
 total_number_NAs <- nrow(na_activity)
 ```
 
-The result of this operation is: `r total_number_NAs` NA's.
+The result of this operation is: `r total_number_NAs` NA's. In relative terms this represents only a fraction of the original dataset (`r total_number_NAs / nrow(activity)`), though.
+
+How to deal with these NA's?
+
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
