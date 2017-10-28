@@ -277,5 +277,59 @@ perc_diff_median <- round(difference_median / median_steps * 100, 1)
 The median total number of steps for the imputed dataset is `r median_steps_imp`. This is only slightly more than the median for the original data (`r as.integer(round(median_steps, 0))`). In relative terms the difference of `r difference_median` represents a (neglectable) difference of only `r perc_diff_median` percent.
 
 
-
 ## Are there differences in activity patterns between weekdays and weekends?
+
+
+Let's make a panel plot so that we can make a visual comparison:
+
+```{r activity_pattern_plots}
+# Using 'activity_imputed'...
+# Adding 'day_type' (factor)variable.
+# First setting 'day_type' to "Weekend":
+activity_imputed$day_type[activity_imputed$weekday == "Saturday" |
+                            activity_imputed$weekday == "Sunday"] <- "Weekend"
+# Now setting the complement to "Weekday":
+activity_imputed$day_type[!(activity_imputed$weekday == "Saturday" |
+                            activity_imputed$weekday == "Sunday")] <- "Weekday"
+# Coercing 'day_type' to factor variable:
+activity_imputed$day_type <- as.factor(activity_imputed$day_type)
+
+# Checking the result by sampling the data:
+# activity_imputed[sample(nrow(activity_imputed), 10), ]
+# Everything seems to be in order — only Saturdays / Sundays are
+# of type "Weekend".
+
+# What is the average daily activity pattern during the weekends?
+steps_by_interval_weekend <- activity_imputed %>%
+  filter(day_type == "Weekend") %>%
+  group_by(interval) %>%
+  summarise (av_steps = mean(steps.imp, na.rm = TRUE))
+
+# What is the average daily activity pattern during weekdays?
+steps_by_interval_weekdays <- activity_imputed %>%
+  filter(day_type == "Weekday") %>%
+  group_by(interval) %>%
+  summarise (av_steps = mean(steps.imp, na.rm = TRUE))
+
+# Creating 'steps_by_interval.imp', since we need that for the panel plot:
+steps_by_interval.imp <- activity_imputed %>%
+  # First group activity by interval...
+  # Keep day_type (needed for plotting).
+  group_by(interval, day_type) %>%
+  # Then summarise by summing steps...
+  summarise (av_steps = round(mean(steps.imp, na.rm = TRUE), 0))
+
+
+# Panelplot? Showing weekend and weekdays side by side...
+# Judging by the look of the example plot lattice should be used here.
+if (!require(lattice)) install.packages("lattice")
+library(lattice)
+
+# This code produces the required plot:
+xyplot(av_steps ~ interval | day_type, data = steps_by_interval.imp,
+       type = "l", layout = c(1,2),
+       ylab = "Number of steps",
+       xlab = "Interval",
+       main = "Activity Pattern")
+```
+
