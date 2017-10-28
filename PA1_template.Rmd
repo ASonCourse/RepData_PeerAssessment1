@@ -153,7 +153,30 @@ total_number_NAs <- nrow(na_activity)
 
 The result of this operation is: `r total_number_NAs` NA's. In relative terms this represents only a fraction of the original dataset (`r total_number_NAs / nrow(activity)`), though.
 
-How to deal with these NA's?
+How to deal with these NA's? Well, that depends. We have to know a bit more about the NA's. How are they spread accross the dates / days? The following code delivers the answer to that question:
+
+```{r NAs_by_day}
+na_by_day <- na_activity %>%
+  group_by(date) %>%
+  summarise(na_count = n())
+na_by_day
+```
+
+The NA's seem to be occuring on only 8 days. Judging by the number of NA's for each day (8 times 288) we can conclude that data for complete days are missing (all 288 intervals (12 x 24)). How are these 8 days without data spread accross the total number of days? What days are missing? Always the same days or does it vary? Let's find out:
+
+```{r NAs_weekday_spread}
+na_by_day$weekday <- weekdays(na_by_day$date)
+na_by_day$weekday <- as.factor(na_by_day$weekday)
+summary(na_by_day)
+different_days <- n_distinct(na_by_day$weekday)
+```
+
+So, the missing data seems to be spread pretty evenly over measurement period and the weekdays (only Tuesday has no missing data; `n-distinct()` returned `r different_days`).
+
+Is it a good idea to impute the missing data by calculating typical averages for each day of the week? This seems reasonable, since data for _complete_ days is missing.
+
+This can be done by getting the average number of steps by day (by grouping and summarizing). Subsequently joining the dataframe with the averages by day with the ungrouped dataframe (by day) makes the averages available. The NA values can now be easily replaced by the daily averages.
+
 
 
 
