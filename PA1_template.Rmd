@@ -135,9 +135,22 @@ max_steps_round <- round(max_steps$av_steps, 0)
 So, the highest number of steps (on average) is `r max_steps_round`. The corresponding interval is `r max_steps$interval`. [Element #5 required for a complete submission ("The 5-minute interval that, on average, contains the maximum number of steps.")]
 
 
-
 ## Imputing missing values
 
 
+So, there are missing values in the dataset (NA's). How many of them are there, exactly? Simply calling `summary()` on `activity` will tell us:
+
+```{r total_number_NAs_1}
+summary(activity)
+```
+
+Alternatively, we can filter out `activity` observations where `steps` is NA and subsequently count the number of rows the filtered dataframe has:
+
+``` {r total_number_NAs_2}
+na_activity <- activity %>% filter(is.na(steps) == TRUE)
+total_number_NAs <- nrow(na_activity)
+```
+
+The result of this operation is: `r total_number_NAs` NA's.
 
 ## Are there differences in activity patterns between weekdays and weekends?
