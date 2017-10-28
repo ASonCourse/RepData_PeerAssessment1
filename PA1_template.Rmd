@@ -261,6 +261,15 @@ perc_diff_mean <- round(difference_mean / mean_steps * 100, 1)
 
 The mean total number of steps for the imputed dataset is `r mean_steps_imp`. This is only slightly more than the mean for the original data (`r as.integer(round(mean_steps, 0))`). In relative terms the difference of `r difference_mean` represents a (neglectable?) difference of only `r perc_diff_mean` percent.
 
+```{r median_total_steps_imp}
+median_total_steps.imp <- activity_imputed %>%
+  group_by(date) %>%
+  summarise (daily_steps = sum(steps.imp)) %>%
+  summarise(median_total_steps = median(daily_steps, na.rm = TRUE))
 
+median_steps_imp <- as.integer(round(median_total_steps.imp$median_total_steps, 0))
+difference_median <- median_steps_imp - median_steps
+perc_diff_median <- round(difference_median / median_steps * 100, 1)
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
