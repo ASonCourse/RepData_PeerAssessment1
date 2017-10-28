@@ -246,5 +246,22 @@ hist(round(steps_by_day.imp$daily_steps, 0),
 
 So, on most days the number of steps still lies between 10.000 and 15.000. There's hardly any visible difference when compared to the histogram that was created using the original (non-imputed) dataset.
 
+Are the mean and the median substantially different? Let's calculate those for the imputed dataset and compare the values to those calculated with the original data:
+
+```{r mean_total_steps_imp}
+mean_total_steps.imp <- activity_imputed %>%
+  group_by(date) %>%
+  summarise (daily_steps = sum(steps.imp)) %>%
+  # Summarise again by averaging daily steps...
+  # Use na.rm = TRUE, otherwise the result is NA...
+  summarise(mean_total_steps = median(daily_steps, na.rm = TRUE))
+
+mean_total_steps.imp
+# ...11015 steps on average per day (the non-imputed data showed
+# a slightly different result: 10765.
+# That's a (neglectable?) difference of about 2.3%...(250 steps per day)
+```
+
+The mean total number of steps for the imputed dataset is `r mean_total_steps.imp$mean_total_steps`. This is only slightly more than the mean for the original data (`r mean_steps`). In relative terms the difference of `r mean_total_steps.imp$mean_total_steps - mean_steps` represents a (neglectable?) difference of only `r (mean_total_steps.imp$mean_total_steps - mean_steps) / mean_steps` percent.
 
 ## Are there differences in activity patterns between weekdays and weekends?
