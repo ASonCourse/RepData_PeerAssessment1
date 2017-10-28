@@ -232,6 +232,8 @@ summary(display_activity_imputed)
 # results from non-imputed data.
 ```
 
+[Element #6 required for a complete submission (“Code to describe and show a strategy for imputing missing data.”)]
+
 Has imputing the data changed the characteristics of the dataset? Let's make a histogram:
 
 ```{r histogram_imputed}
